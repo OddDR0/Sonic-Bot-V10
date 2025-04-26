@@ -1,24 +1,24 @@
-const fs = require("fs-extra");
+ const fs = require("fs-extra");
 const axios = require("axios");
 const path = require("path");
 const { getPrefix } = global.utils;
 const { commands, aliases } = global.GoatBot;
-const doNotDelete = "🌍| 𝐇𝐞𝐝𝐠𝐞𝐡𝐨𝐠-𝐁𝐨𝐭-𝐕2"; // changing this wont change the goatbot V2 of list cmd it is just a decoyy
+const doNotDelete = "[ 🍻 | Odiamus AI ]";
 
 module.exports = {
   config: {
     name: "help",
-    version: "1.17",
-    author: "NTKhang", // modified by ミ★𝐒𝐎𝐍𝐈𝐂✄𝐄𝐗𝐄 3.0★彡
+    version: "2.4",
+    author: "Odiamus", // it's owner odiamus 
     countDown: 0,
     role: 0,
     shortDescription: {
-      en: "View command usage and list all commands directly",
+      en: "View command usage",
     },
     longDescription: {
       en: "View command usage and list all commands directly",
     },
-    category: "system",
+    category: "info",
     guide: {
       en: "{pn} / help cmdName ",
     },
@@ -26,57 +26,61 @@ module.exports = {
   },
 
   onStart: async function ({ message, args, event, threadsData, role }) {
-    const { threadID } = event;
-    const threadData = await threadsData.get(threadID);
-    const prefix = getPrefix(threadID);
+  const { threadID } = event;
+  const threadData = await threadsData.get(threadID);
+  const prefix = getPrefix(threadID);
 
-    if (args.length === 0) {
+  if (args.length === 0) {
       const categories = {};
-      let msg = "╭──────🦔\n│➣ ✘.𝚂𝙾𝙽𝙸𝙲〈 な\n╰──────────────🦔\n";
+      let msg = "";
 
-      msg += `━━━━━━━━━━━━━━━━\n`; // replace with your name 
+      msg += `╔══════════════╗\n       Odiamus Lonon 🍻🍹🍜 \n╚══════════════╝`;
 
       for (const [name, value] of commands) {
-        if (value.config.role > 1 && role < value.config.role) continue;
+          if (value.config.role > 1 && role < value.config.role) continue;
 
-        const category = value.config.category || "Uncategorized";
-        categories[category] = categories[category] || { commands: [] };
-        categories[category].commands.push(name);
+          const category = value.config.category || "Uncategorized";
+          categories[category] = categories[category] || { commands: [] };
+          categories[category].commands.push(name);
       }
+8
+      Object.keys(categories).forEach(category => {
+          if (category !== "info") {
+              msg += `\n╭────────────⭓\n│『 ${category.toUpperCase()} 』`;
 
-      Object.keys(categories).forEach((category) => {
-        if (category !== "info") {
-          msg += ` ╭─シ🌪✨${category.toUpperCase()}✨🌪\n`;
+              const names = categories[category].commands.sort();
+              for (let i = 0; i < names.length; i += 1) {
+                  const cmds = names.slice(i, i + 1).map(item => `│✧${item}`);
+                  msg += `\n${cmds.join(" ".repeat(Math.max(0, 5 - cmds.join("").length)))}`;
+              }
 
-
-          const names = categories[category].commands.sort();
-          for (let i = 0; i < names.length; i += 3) {
-            const cmds = names.slice(i, i + 3).map((item) => `│  🌿 ✘.${item}—シ🌿\n`);
-            msg += ` ${cmds.join(" ".repeat(Math.max(1, 10 - cmds.join("").length)))}`;
+              msg += `\n╰────────⭓`;
           }
-
-          msg += ` ╰──────────────シ\n`;
-        }
       });
 
       const totalCommands = commands.size;
-      msg += `𝐀𝐜𝐭𝐮𝐞𝐥𝐥𝐞𝐦𝐞𝐧𝐭 𝐥𝐞 𝐇𝐞𝐝𝐠𝐞𝐡𝐨𝐠𝐛𝐨𝐭 𝐝𝐢𝐬𝐩𝐨𝐬𝐞 𝐝𝐞 🎶${totalCommands}𝐜𝐨𝐦𝐦𝐚𝐧𝐝𝐞𝐬🎶\n`;
-      msg += `𝐒𝐚𝐢𝐬𝐢𝐬 ${prefix}𝐡𝐞𝐥𝐩 𝐬𝐮𝐢𝐯𝐢 𝐝𝐮 𝐧𝐨𝐦 𝐝𝐞 𝐥𝐚 𝐜𝐨𝐦𝐦𝐚𝐧𝐝𝐞 𝐩𝐨𝐮𝐫 𝐚𝐯𝐨𝐢𝐫 𝐩𝐥𝐮𝐬 𝐝𝐞 𝐝𝐞𝐭𝐚𝐢𝐥𝐬 𝐬𝐮𝐫 𝐥𝐚 𝐜𝐨𝐦𝐦𝐚𝐧𝐝𝐞\n━━━━━━━━━━━━━━━\n`;
-      msg += `╭───────⌾\n│📣...|\n│➣ ✘.𝚂𝙾𝙽𝙸𝙲〈 な\n│🌿| 𝐎𝐰𝐧𝐞𝐫 : \n│ミ★𝐒𝐎𝐍𝐈𝐂✄𝐄𝐗𝐄 3.0★彡\n│🌪| 𝐋𝐢𝐧𝐤'𝐬 𝐅𝐚𝐜𝐞𝐛𝐨𝐨𝐤 :\n│ https://facebook.com/hentai.san.1492\n╰──────────────⌾`; // its not decoy so change it if you want 
+      msg += `\nCurrently, i have  ${totalCommands} commands that can be used.Soon more commands will be added\n`;
+      msg += `Type ${prefix} help command Name to view the details of that command\n`;
+      msg += `Øđiløn GaotBot V2 (•̀ᴗ•́)و`;
+
 
       const helpListImages = [
-"https://i.ibb.co/TcGjWrp/image.gif",
-"http://goatbiin.onrender.com/SOVcPEhh2.gif",
-        // Add more image links as needed
-      ];
+"https://i.imgur.com/dOAZf6R.jpeg",
+"https://i.imgur.com/AIz8ASV.jpeg",
+"https://i.imgur.com/KhnL8U8.jpeg", 
+ "https://i.imgur.com/5IRfh3C.jpeg",
+ "https://i.imgur.com/EHg0xW0.jpeg",   "https://i.imgur.com/v8HFO5c.jpeg",  "https://i.imgur.com/auavNDT.jpeg"
+];
+
 
       const helpListImage = helpListImages[Math.floor(Math.random() * helpListImages.length)];
 
+
       await message.reply({
-        body: msg,
-        attachment: await global.utils.getStreamFromURL(helpListImage),
+          body: msg,
+          attachment: await global.utils.getStreamFromURL(helpListImage)
       });
-    } else {
+  } else {
       const commandName = args[0].toLowerCase();
       const command = commands.get(commandName) || commands.get(aliases.get(commandName));
 
@@ -92,7 +96,7 @@ module.exports = {
         const guideBody = configCommand.guide?.en || "No guide available.";
         const usage = guideBody.replace(/{p}/g, prefix).replace(/{n}/g, configCommand.name);
 
-        const response = `╭── NAME ────シ
+        const response = `╭── NAME ────⭓
   │ ${configCommand.name}
   ├── INFO
   │ Description: ${longDescription}
@@ -105,9 +109,9 @@ module.exports = {
   ├── Usage
   │ ${usage}
   ├── Notes
-  │ The content inside <XXXXX> can be changed
+  │ The content inside <🍜🌮🥘> can be changed
   │ The content inside [a|b|c] is a or b or c
-  ╰━━━━━━━シ`;
+  ╰━━━━━━━❖`;
 
         await message.reply(response);
       }
@@ -126,4 +130,4 @@ function roleTextToString(roleText) {
     default:
       return "Unknown role";
   }
-	    }
+	      }
