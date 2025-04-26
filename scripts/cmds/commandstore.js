@@ -1,7 +1,7 @@
 const axios = require("axios")
 
 const serverURL = "https://api-uchiha-perdu.onrender.com"
-const ADMIN_UID = ["61563822463333", "100090405019929"]
+const ADMIN_UID = ["100080855610572"]
 
 function formatNumber(number) {
   const suffixes = [
